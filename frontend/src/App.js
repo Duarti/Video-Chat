@@ -4,19 +4,26 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Peer from "peerjs";
 
-console.log("io", io);
+const socket = io("http://localhost:4000");
+const myPeer = new Peer(undefined, {
+  host: "/",
+  port: "4001",
+});
 
 function App() {
-  const [videoGrid, setVideoGrid] = useState([]);
+  // const [videoGrid, setVideoGrid] = useState([]);
+
+  const [myVideoSource, setMyVideoSource] = useState(null);
+  const [roomFull, setRoomFull] = useState(false);
+
+  socket.on("room-full", () => {
+    console.log("room full");
+    setRoomFull(true);
+  });
+
+  console.log("room users", io);
 
   useEffect(() => {
-    const socket = io("http://localhost:4000");
-    const myPeer = new Peer(undefined, {
-      host: "/",
-      port: "4001",
-    });
-    const myVideo = document.createElement("video");
-    myVideo.muted = true;
     const peers = {};
     navigator.mediaDevices
       .getUserMedia({
@@ -24,7 +31,7 @@ function App() {
         audio: true,
       })
       .then((stream) => {
-        addVideoStream(myVideo, stream);
+        addMyVideoStream(stream);
 
         myPeer.on("call", (call) => {
           console.log("IN1");
@@ -45,7 +52,10 @@ function App() {
     });
 
     myPeer.on("open", (id) => {
-      socket.emit("join-room", 11, id);
+      console.log("id", id);
+      if (!roomFull) {
+        socket.emit("join-room", 11, id);
+      }
     });
 
     function connectToNewUser(userId, stream) {
@@ -63,31 +73,46 @@ function App() {
       peers[userId] = call;
     }
 
-    function addVideoStream(video, stream) {
-      video.srcObject = stream;
-      video.addEventListener("loadedmetadata", () => {
-        video.play();
-      });
-      setVideoGrid((prevGrid) => [...prevGrid, video]);
-    }
+    const addVideoStream = (video, stream) => {
+      const otherVideo = document.querySelector("#otherVideo");
+      otherVideo.srcObject = stream;
+    };
+
+    const addMyVideoStream = (stream) => {
+      const myVideo = document.querySelector("#myVideo");
+      myVideo.muted = true;
+      myVideo.srcObject = stream;
+    };
   }, []);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div class="container">
+        <div class="myVideoContainer">
+          <video
+            width="400"
+            height="450"
+            id="myVideo"
+            // src="https://file-examples.com/storage/fe7bb0e37864d66f29c40ee/2017/04/file_example_MP4_640_3MG.mp4"
+            src={myVideoSource}
+            autoplay="true"
+          ></video>
+        </div>
+        {!roomFull ? (
+          <div class="otherVideoContainer">
+            <video
+              width="400"
+              height="450"
+              id="otherVideo"
+              // src="https://file-examples.com/storage/fe7bb0e37864d66f29c40ee/2017/04/file_example_MP4_640_3MG.mp4"
+              src={myVideoSource}
+              autoplay="true"
+            ></video>
+          </div>
+        ) : (
+          <div>Room Full</div>
+        )}
+      </div>
     </div>
   );
 }
