@@ -16,7 +16,6 @@ app.use(express.static("public"));
 app.use(cors());
 
 app.get("/", (req, res) => {
-  console.log("XD");
   res.redirect(`/${uuidV4()}`);
 });
 
@@ -26,22 +25,20 @@ app.get("/:room", (req, res) => {
 
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId) => {
-    // console.log("roomClients", roomClients);
-
     const roomClients = io.sockets.adapter.rooms.get(roomId);
-    console.log("xx", roomClients);
 
     if (roomClients?.size === 2) {
       socket.emit("room-full");
     } else {
       socket.join(roomId);
       socket.broadcast.to(roomId).emit("user-connected", userId);
+
+      socket.on("send-message", (message) => {
+        socket.broadcast.to(roomId).emit("message", message);
+      });
     }
 
-    console.log("roomClients", roomClients);
-
     socket.on("disconnect", () => {
-      console.log("disconnected");
       socket.broadcast.to(roomId).emit("user-disconnected", userId);
       if (roomClients?.size < 2) {
         socket.emit("room-free");
