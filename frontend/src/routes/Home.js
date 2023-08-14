@@ -4,8 +4,6 @@ import { v4 as uuid } from "uuid";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-// import "antd/dist/antd.css";
-
 const Home = () => {
   const [isCreateRoomModalOpen, setIsCreateRoomModalOpen] = useState(false);
   const [isJoinRoomModalOpen, setIsJoinRoomModalOpen] = useState(false);
@@ -26,8 +24,6 @@ const Home = () => {
     navigate(`/room/${joinRoomId}`);
   };
 
-  const handleOk = () => {};
-
   const handleCancel = () => {
     setIsCreateRoomModalOpen(false);
     setIsJoinRoomModalOpen(false);
@@ -47,17 +43,24 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1>Welcome</h1>
-      <Button type="primary" onClick={onCreateRoomClick}>
+      <h1 style={{ color: "white" }}>Welcome</h1>
+      <Button
+        type="primary"
+        onClick={onCreateRoomClick}
+        style={{ backgroundColor: "#974EC3" }}
+      >
         Create Room
       </Button>
-      <Button type="primary" onClick={onJoinRoomClick}>
+      <Button
+        type="primary"
+        onClick={onJoinRoomClick}
+        style={{ backgroundColor: "#974EC3" }}
+      >
         Join Room
       </Button>
       <Modal
         title="Create Room"
         open={isCreateRoomModalOpen}
-        onOk={handleOk}
         onCancel={handleCancel}
         footer={[
           <Button key="back" onClick={handleCopy}>
@@ -68,6 +71,7 @@ const Home = () => {
             type="primary"
             loading={false}
             onClick={createHandleJoin}
+            style={{ backgroundColor: "#974EC3" }}
           >
             Continue
           </Button>,
@@ -80,7 +84,6 @@ const Home = () => {
       <Modal
         title="Join Room"
         open={isJoinRoomModalOpen}
-        onOk={handleOk}
         onCancel={handleCancel}
         footer={[
           <Button key="back" onClick={handleCancel}>
@@ -91,6 +94,7 @@ const Home = () => {
             type="primary"
             loading={false}
             onClick={onJoinRoomConfirm}
+            style={{ backgroundColor: "#974EC3" }}
           >
             Join Room
           </Button>,
@@ -108,66 +112,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// import React, { useState } from 'react';
-// import { Button, Modal } from 'antd';
-
-// const App: React.FC = () => {
-//   const [loading, setLoading] = useState(false);
-//   const [open, setOpen] = useState(false);
-
-//   const showModal = () => {
-//     setOpen(true);
-//   };
-
-//   const handleOk = () => {
-//     setLoading(true);
-//     setTimeout(() => {
-//       setLoading(false);
-//       setOpen(false);
-//     }, 3000);
-//   };
-
-//   const handleCancel = () => {
-//     setOpen(false);
-//   };
-
-//   return (
-//     <>
-//       <Button type="primary" onClick={showModal}>
-//         Open Modal with customized footer
-//       </Button>
-//       <Modal
-//         open={open}
-//         title="Title"
-//         onOk={handleOk}
-//         onCancel={handleCancel}
-//         footer={[
-//           <Button key="back" onClick={handleCancel}>
-//             Return
-//           </Button>,
-//           <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-//             Submit
-//           </Button>,
-//           <Button
-//             key="link"
-//             href="https://google.com"
-//             type="primary"
-//             loading={loading}
-//             onClick={handleOk}
-//           >
-//             Search on Google
-//           </Button>,
-//         ]}
-//       >
-//         <p>Some contents...</p>
-//         <p>Some contents...</p>
-//         <p>Some contents...</p>
-//         <p>Some contents...</p>
-//         <p>Some contents...</p>
-//       </Modal>
-//     </>
-//   );
-// };
-
-// export default App;

@@ -6,21 +6,14 @@ var io = require("socket.io")(server, {
     origin: "*",
   },
 });
-const { v4: uuidV4 } = require("uuid");
-const cors = require("cors"); // Import the cors middleware
+const cors = require("cors");
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-
-// Use the cors middleware
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.redirect(`/${uuidV4()}`);
-});
-
-app.get("/:room", (req, res) => {
-  res.render("room", { roomId: req.params.room });
+  res.send("Server is online");
 });
 
 io.on("connection", (socket) => {

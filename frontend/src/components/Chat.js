@@ -14,7 +14,7 @@ const Chat = ({ message, messages, onMessageChange, onSendClick }) => {
 
   return (
     <div className="leftContainer">
-      <h2>Chat</h2>
+      <h2 style={{ color: "white" }}>Chat</h2>
       <div className="chatContainer">
         {messages.map((message, index) => (
           <ChatMessage key={index} message={message} />
@@ -26,6 +26,7 @@ const Chat = ({ message, messages, onMessageChange, onSendClick }) => {
           onChange={onMessageChange}
           value={message}
           onKeyDown={(e) => enterPressHandler(e)}
+          className="chatInput"
         ></Input>
         <SendOutlined className="sendIcon" onClick={onSendClick} />
       </div>

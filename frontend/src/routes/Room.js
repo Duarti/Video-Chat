@@ -10,32 +10,10 @@ import WaitingUserText from "../components/WaitingUserText";
 const socket = io("http://localhost:4000");
 
 const Room = () => {
-  // const [videoGrid, setVideoGrid] = useState([]);
-
   const { roomId } = useParams();
-
-  const initialMessages = [
-    {
-      text: "Hello",
-      sender: "me",
-    },
-    {
-      text: "Hi",
-      sender: "other",
-    },
-    {
-      text: "How are you?",
-      sender: "me",
-    },
-    {
-      text: "Good, you?",
-      sender: "other",
-    },
-  ];
-
   const [roomFull, setRoomFull] = useState(false);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState([]);
   const [otherUserJoined, setOtherUserJoined] = useState(false);
 
   const onMessageChange = (e) => {
@@ -131,6 +109,14 @@ const Room = () => {
       myVideo.srcObject = stream;
     };
   }, []);
+
+  const chatContainer = document.querySelector(".chatContainer");
+
+  useEffect(() => {
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <div className="App">
