@@ -7,7 +7,8 @@ import Chat from "../components/Chat";
 import RoomFull from "../components/RoomFull";
 import WaitingUserText from "../components/WaitingUserText";
 
-const socket = io("http://localhost:4000");
+// const socket = io("http://localhost:4000");
+const socket = io("https://video-chat-225d.onrender.com");
 
 const Room = () => {
   const { roomId } = useParams();
