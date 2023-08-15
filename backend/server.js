@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
+const path = require("path");
 var io = require("socket.io")(server, {
   cors: {
     origin: "*",
@@ -8,16 +9,20 @@ var io = require("socket.io")(server, {
 });
 const cors = require("cors");
 
-app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Server is online");
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
+// app.get("/", (req, res) => {
+//   res.send("Server is online");
+// });
 
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId) => {
+    console.log("joined room");
     const roomClients = io.sockets.adapter.rooms.get(roomId);
 
     if (roomClients?.size === 2) {

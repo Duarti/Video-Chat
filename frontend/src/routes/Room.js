@@ -53,10 +53,7 @@ const Room = () => {
         audio: true,
       })
       .then((stream) => {
-        const myPeer = new Peer(undefined, {
-          host: "/",
-          port: "4001",
-        });
+        const myPeer = new Peer(undefined);
 
         myPeer.on("open", (id) => {
           if (!roomFull) {
