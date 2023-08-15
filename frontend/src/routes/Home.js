@@ -47,14 +47,14 @@ const Home = () => {
       <Button
         type="primary"
         onClick={onCreateRoomClick}
-        style={{ backgroundColor: "#974EC3" }}
+        style={{ backgroundColor: "white", color: "black" }}
       >
         Create Room
       </Button>
       <Button
         type="primary"
         onClick={onJoinRoomClick}
-        style={{ backgroundColor: "#974EC3" }}
+        style={{ backgroundColor: "white", color: "black" }}
       >
         Join Room
       </Button>

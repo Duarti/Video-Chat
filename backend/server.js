@@ -16,13 +16,8 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// app.get("/", (req, res) => {
-//   res.send("Server is online");
-// });
-
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId) => {
-    console.log("joined room");
     const roomClients = io.sockets.adapter.rooms.get(roomId);
 
     if (roomClients?.size === 2) {
